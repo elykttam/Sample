@@ -1,19 +1,36 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
-use App\Models\Student;
-use App\Models\Post;
-use App\Models\Media;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaymentTypeController;
+use App\Http\Middleware\CheckUserType;
+// use App\Http\Middleware\BlockEverything;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('students', function () {
-//   return Media::with('media')->get();
-//   // return Media::with('model')->get();
-//   // return Student::with('media')->find(1);
-// }); 
+Route::post('login', [AuthController::class, 'login']);
+Route::get('login', [AuthController::class, 'loginPage'])->name('login');
 
-// Route::get('posts', function () {
-//     return Post::with('tags')->get();
-// }); 
-// Route::view('/', 'intro');
-Route::resource('students', StudentController::class);
+// Route::group(['middleware' => BlockEverything::class], function () {
+// Route::get('info', function() {
+//       return 'kyle pogi';
+//     });
+// });
+
+Route::group(['middleware' => [
+    'auth',
+]], function () {
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+    // user
+    Route::resource('students', StudentController::class);
+
+    // admin routes
+    Route::group([
+        'middleware' => CheckUserType::class,
+        'prefix' => 'admin',
+    ], function () {
+      Route::resource('users', UserController::class);
+      Route::resource('payment_types', PaymentTypeController::class);
+    });
+});

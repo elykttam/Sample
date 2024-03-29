@@ -15,7 +15,7 @@ class StudentController extends Controller
     { 
         $students = Student::with([
             'subjects', 
-            'registration'
+            'registration',
         ])
             ->where('grades', '>=', $request->get('grades', 70))
             // ->where('first_name', 'ilike', 'K%')
@@ -23,13 +23,8 @@ class StudentController extends Controller
             ->limit(5)
             ->get();
 
-        return Inertia::render('Student/Index', [
+        return Inertia::render('Students/Index', [
             'students' => $students,
-        ]);
-
-        return view('students.index', [
-            'students' => $students
-            // 'students' => Student::with('subjects')->get()
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\UserType;
 use App\Models\Student;
 use App\Models\StudentRegistration;
 use App\Models\User;
@@ -42,13 +43,19 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->seedMedia();
-        // User::factory(10)->create();
-        // Student::factory(500)
-        //     ->has(Subject::factory()->count(10))
-        //     ->create()
-        //     ->each(function ($student) {
-        //         StudentRegistration::factory()->create(['student_id' => $student->getKey()]);
-        //     });
+
+        User::factory()->create([
+            'email' => 'admin@mail.com',
+            'type' => UserType::ADMIN->value,
+        ]);
+
+        User::factory(10)->create();
+        Student::factory(500)
+            ->has(Subject::factory()->count(10))
+            ->create()
+            ->each(function ($student) {
+                StudentRegistration::factory()->create(['student_id' => $student->getKey()]);
+            });
 
         $iot = Tag::create(['name' => 'IOT']);
         $tech = Tag::create(['name' => 'Technology']);
