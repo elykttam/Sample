@@ -5,7 +5,6 @@ import React from "react";
 export default function Login() {
 	const { data, errors, setData, post } = useForm({
 		email: "admin@mail.com",
-
 		password: "password",
 	});
 
